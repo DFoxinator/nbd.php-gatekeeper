@@ -37,7 +37,7 @@ class BetweenTimesRuleTest extends BaseTest {
             new \DateTimeImmutable( 'May 15, 2016 20:15:15' ),
             new \DateTimeImmutable( 'May 25, 2016 20:15:15' ),
             new \DateTimeImmutable( 'May 21, 2016 14:15:15' ),
-            false
+            true
         ],
         [
             new \DateTimeImmutable( 'May 15, 2016 20:15:15' ),
