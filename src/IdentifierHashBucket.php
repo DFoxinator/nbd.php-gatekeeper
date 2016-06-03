@@ -7,56 +7,30 @@ class IdentifierHashBucket {
   const DEFAULT_NUM_BUCKETS = 100;
 
   /**
-   * @var string
+   * @var array
    */
-  private $_salt;
+  private static $_bucket_cache = [];
 
   /**
-   * @var mixed
-   */
-  private $_identifier;
-
-  /**
-   * @var int
-   */
-  private $_num_buckets;
-
-  /**
-   * @var int
-   */
-  private $_bucket = null;
-
-  /**
-   * @param string $salt - right now the callers of this class all use feature name as salt
-   * @param mixed  $identifier
+   * @param $identifier
+   * @param $salt
    * @param int $num_buckets
-   */
-  public function __construct( $salt, $identifier, $num_buckets = self::DEFAULT_NUM_BUCKETS ) {
-
-    $this->_salt        = $salt;
-    $this->_identifier  = $identifier;
-    $this->_num_buckets = $num_buckets;
-
-  } // __construct
-
-  /**
    * @return int
    */
-  public function getBucket() {
+  public static function getBucket( $identifier, $salt, $num_buckets = self::DEFAULT_NUM_BUCKETS ) {
 
-    if ( $this->_bucket === null ) {
-      $this->_calculateBucket();
+    $cache_key = $salt . $identifier . $num_buckets;
+
+    if ( isset( self::$_bucket_cache[ $cache_key ] ) ) {
+      return self::$_bucket_cache[ $cache_key ];
     }
 
-    return $this->_bucket;
+    $hash = abs( crc32( $salt . $identifier ) );
+
+    self::$_bucket_cache[ $cache_key ] = ( $hash % $num_buckets ) + 1;
+
+    return self::$_bucket_cache[ $cache_key ];
 
   } // getBucket
-
-  protected function _calculateBucket() {
-
-    $hash          = abs( crc32( $this->_salt . $this->_identifier ) );
-    $this->_bucket = ( $hash % $this->_num_buckets ) + 1;
-
-  } // _calculateBucket
 
 } // IdentifierHashBucket

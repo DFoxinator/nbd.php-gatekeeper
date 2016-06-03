@@ -8,6 +8,11 @@ class IdentifierHashBucketTest extends BaseTest {
 
   /**
    * @test
+   *
+   * @param string|int $identifier
+   * @param int        $expected_feature_1_bucket
+   * $param int        $expected_feature_2_bucket
+   *
    * @dataProvider getBucketDefaultProvider
    */
   public function getBucketDefault( $identifier, $expected_feature_1_bucket, $expected_feature_2_bucket ) {
@@ -15,15 +20,15 @@ class IdentifierHashBucketTest extends BaseTest {
     $salt_1 = 'my_test_feature';
     $salt_2 = 'another_feature';
 
-    $identifier_hash_bucket = new IdentifierHashBucket( $salt_1, $identifier );
+    $identifier_hash_bucket = IdentifierHashBucket::getBucket( $identifier, $salt_1 );
 
-    $this->assertEquals( $expected_feature_1_bucket, $identifier_hash_bucket->getBucket() );
-    $this->assertEquals( $expected_feature_1_bucket, $identifier_hash_bucket->getBucket() );
+    $this->assertEquals( $expected_feature_1_bucket, $identifier_hash_bucket );
+    $this->assertEquals( $expected_feature_1_bucket, $identifier_hash_bucket );
 
-    $identifier_hash_bucket = new IdentifierHashBucket( $salt_2, $identifier );
+    $identifier_hash_bucket = IdentifierHashBucket::getBucket( $identifier, $salt_2 );
 
-    $this->assertEquals( $expected_feature_2_bucket, $identifier_hash_bucket->getBucket() );
-    $this->assertEquals( $expected_feature_2_bucket, $identifier_hash_bucket->getBucket() );
+    $this->assertEquals( $expected_feature_2_bucket, $identifier_hash_bucket );
+    $this->assertEquals( $expected_feature_2_bucket, $identifier_hash_bucket );
 
   } // getBucketDefault
 
@@ -44,6 +49,11 @@ class IdentifierHashBucketTest extends BaseTest {
 
   /**
    * @test
+   *
+   * @param string|int $identifier
+   * @param int        $expected_feature_1_bucket
+   * @param int        $expected_feature_2_bucket
+   *
    * @dataProvider getBucketWithNumProvider
    */
   public function getBucketWithNum( $identifier, $expected_feature_1_bucket, $expected_feature_2_bucket ) {
@@ -52,15 +62,15 @@ class IdentifierHashBucketTest extends BaseTest {
     $salt_2   = 'banother_feature';
     $num_buckets = 10;
 
-    $identifier_hash_bucket = new IdentifierHashBucket( $salt_1, $identifier, $num_buckets );
+    $identifier_hash_bucket = IdentifierHashBucket::getBucket( $identifier, $salt_1, $num_buckets );
 
-    $this->assertEquals( $expected_feature_1_bucket, $identifier_hash_bucket->getBucket() );
-    $this->assertEquals( $expected_feature_1_bucket, $identifier_hash_bucket->getBucket() );
+    $this->assertEquals( $expected_feature_1_bucket, $identifier_hash_bucket );
+    $this->assertEquals( $expected_feature_1_bucket, $identifier_hash_bucket );
 
-    $identifier_hash_bucket = new IdentifierHashBucket( $salt_2, $identifier, $num_buckets );
+    $identifier_hash_bucket = IdentifierHashBucket::getBucket( $identifier, $salt_2, $num_buckets );
 
-    $this->assertEquals( $expected_feature_2_bucket, $identifier_hash_bucket->getBucket() );
-    $this->assertEquals( $expected_feature_2_bucket, $identifier_hash_bucket->getBucket() );
+    $this->assertEquals( $expected_feature_2_bucket, $identifier_hash_bucket );
+    $this->assertEquals( $expected_feature_2_bucket, $identifier_hash_bucket );
 
   } // getBucketWithNum
 
